@@ -1,0 +1,23 @@
+{
+  "action": {
+    "default_popup": "./extension/popup.html"
+  },
+  "author": "bytebase",
+  "background": {
+    "service_worker": "./background.js"
+  },
+  "description": "A chrome extension showing star history graph of current GitHub repository",
+  "homepage_url": "https://github.com/bytebase/star-history",
+  "host_permissions": [
+    "https://api.github.com/"
+  ],
+  "icons": {
+    "128": "icon.png"
+  },
+  "manifest_version": 3,
+  "name": "Star History",
+  "permissions": [
+    "activeTab"
+  ],
+  "version": "2.0"
+}
