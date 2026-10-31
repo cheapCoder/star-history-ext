@@ -99,3 +99,19 @@ test("固定接口版本，token 只在有值时带上", async () => {
   await getRepoStarRecords("o/r", "abc");
   assert.equal(calls[0].headers.Authorization, "token abc");
 });
+
+test("本周没过完时最后一个点取当前时间，不受时区影响", async () => {
+  const realNow = Date.now;
+  const realTz = process.env.TZ;
+  const week = Date.UTC(2026, 9, 25) / 1000;
+  process.env.TZ = "Asia/Shanghai";
+  Date.now = () => (week + 6 * DAY + 20 * 3600) * 1000;
+  try {
+    mockGitHub([{ week, total: 5, days: [1, 1, 1, 1, 0, 1, 0] }]);
+    assert.deepEqual(await getRepoStarRecords("o/r"), [{ date: "2026/11/1", count: 5 }]);
+  } finally {
+    Date.now = realNow;
+    if (realTz === undefined) delete process.env.TZ;
+    else process.env.TZ = realTz;
+  }
+});

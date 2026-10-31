@@ -36,7 +36,8 @@ export async function getRepoStarRecords(repo, token = "") {
   let count = 0;
   const points = weeks.map(({ week, total }) => {
     count += total;
-    return { date: dateString(Math.min(week * 1000 + 6 * DAY_MS, now)), count };
+    const start = week * 1000;
+    return { date: dateString(start + 7 * DAY_MS > now ? now : start + 6 * DAY_MS), count };
   });
   if (points.length <= MAX_POINTS) return points;
   return Array.from(
